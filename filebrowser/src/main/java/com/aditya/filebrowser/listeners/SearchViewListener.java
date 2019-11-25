@@ -1,6 +1,6 @@
 package com.aditya.filebrowser.listeners;
 
-import android.support.v7.widget.SearchView;
+import androidx.appcompat.widget.SearchView;
 
 import com.aditya.filebrowser.adapters.CustomAdapter;
 

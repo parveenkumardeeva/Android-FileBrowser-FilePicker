@@ -3,8 +3,8 @@ package com.aditya.filebrowser.listeners;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.IdRes;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.IdRes;
+import androidx.core.content.ContextCompat;
 import android.widget.RadioGroup;
 
 import com.aditya.filebrowser.Constants;
