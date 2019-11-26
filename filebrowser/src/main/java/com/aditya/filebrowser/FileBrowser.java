@@ -13,12 +13,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.core.content.FileProvider;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,7 +56,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class FileBrowser extends AppCompatActivity implements OnFileChangedListener,IContextSwitcher {
+public class FileBrowser extends AppCompatActivity implements OnFileChangedListener, IContextSwitcher {
 
     private Context mContext;
 
@@ -83,6 +85,9 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         mContext = this;
 
@@ -116,10 +121,12 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
             switchMode(Constants.CHOICE_MODE.SINGLE_CHOICE);
             return;
         }
-
+        super.onBackPressed();
+/*
         if (!mNavigationHelper.navigateBack()) {
             super.onBackPressed();
-        }
+        }*/
+
     }
 
     @Override
@@ -139,7 +146,7 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         mSearchMenuItem = menu.findItem(R.id.action_search);
-        mSearchView = (SearchView)mSearchMenuItem.getActionView();
+        mSearchView = (SearchView) mSearchMenuItem.getActionView();
         // Assumes current activity is the searchable activity
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         //searchView.setSubmitButtonEnabled(true);
@@ -158,16 +165,14 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
                 AssortedUtils.SavePrefs(Constants.SHOW_FOLDER_SIZE, "true", mContext);
 
             onFileChanged(mNavigationHelper.getCurrentDirectory());
-        }
-        else if (item.getItemId() == R.id.action_newfolder) {
-            UIUtils.showEditTextDialog(this, getString(R.string.new_folder), "", new IFuncPtr(){
+        } else if (item.getItemId() == R.id.action_newfolder) {
+            UIUtils.showEditTextDialog(this, getString(R.string.new_folder), "", new IFuncPtr() {
                 @Override
                 public void execute(final String val) {
-                    io.createDirectory(new File(mNavigationHelper.getCurrentDirectory(),val.trim()));
+                    io.createDirectory(new File(mNavigationHelper.getCurrentDirectory(), val.trim()));
                 }
             });
-        }
-        else if (item.getItemId() == R.id.action_paste) {
+        } else if (item.getItemId() == R.id.action_paste) {
             if (op.getOperation() == Operations.FILE_OPERATIONS.NONE) {
                 UIUtils.ShowToast(mContext.getString(R.string.no_operation_error), mContext);
             }
@@ -175,8 +180,11 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
                 UIUtils.ShowToast(mContext.getString(R.string.no_files_paste), mContext);
             }
             io.pasteFiles(mNavigationHelper.getCurrentDirectory());
-        }
 
+        } else if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
         return false;
     }
 
@@ -197,7 +205,7 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
 
         mCurrentPath = findViewById(R.id.currentPath);
         mFilesListView = findViewById(R.id.recycler_view);
-        mAdapter = new CustomAdapter(mFileList,mContext);
+        mAdapter = new CustomAdapter(mFileList, mContext);
         mFilesListView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(mContext);
         mFilesListView.setLayoutManager(mLayoutManager);
@@ -205,7 +213,7 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
             @Override
             public void onItemClick(View view, int position) {
                 // TODO Handle item click
-                if (mAdapter.getChoiceMode()== Constants.CHOICE_MODE.SINGLE_CHOICE) {
+                if (mAdapter.getChoiceMode() == Constants.CHOICE_MODE.SINGLE_CHOICE) {
                     File f = mAdapter.getItemAt(position).getFile();
                     if (f.isDirectory()) {
                         closeSearchView();
@@ -215,7 +223,7 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
                         Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
                         String mimeType = mimeMap.getMimeTypeFromExtension(FilenameUtils.getExtension(f.getName()));
                         Uri uri = FileProvider.getUriForFile(mContext, mContext.getString(R.string.filebrowser_provider), f);
-                        openFileIntent.setDataAndType(uri,mimeType);
+                        openFileIntent.setDataAndType(uri, mimeType);
                         openFileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         openFileIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         try {
@@ -256,7 +264,7 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
         mBottomView = findViewById(R.id.bottom_navigation);
         mTopStorageView = findViewById(R.id.currPath_Nav);
 
-        mTabChangeListener = new TabChangeListener(this, mNavigationHelper, mAdapter, io,this);
+        mTabChangeListener = new TabChangeListener(this, mNavigationHelper, mAdapter, io, this);
 
         mBottomView.setOnTabSelectListener(mTabChangeListener);
         mBottomView.setOnTabReselectListener(mTabChangeListener);
@@ -271,7 +279,7 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
 
         //switch to initial directory if given
         String initialDirectory = getIntent().getStringExtra(Constants.INITIAL_DIRECTORY);
-        if (initialDirectory != null && !initialDirectory.isEmpty() ) {
+        if (initialDirectory != null && !initialDirectory.isEmpty()) {
             File initDir = new File(initialDirectory);
             if (initDir.exists())
                 mNavigationHelper.changeDirectory(initDir);
@@ -284,9 +292,9 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
             if (mActionMode != null)
                 mActionMode.finish();
         } else {
-            if(mActionMode == null) {
+            if (mActionMode == null) {
                 closeSearchView();
-                ToolbarActionMode newToolBar = new ToolbarActionMode(this,this, mAdapter, Constants.APP_MODE.FILE_BROWSER, io);
+                ToolbarActionMode newToolBar = new ToolbarActionMode(this, this, mAdapter, Constants.APP_MODE.FILE_BROWSER, io);
                 mActionMode = startSupportActionMode(newToolBar);
                 mActionMode.setTitle(mContext.getString(R.string.select_multiple));
             }
