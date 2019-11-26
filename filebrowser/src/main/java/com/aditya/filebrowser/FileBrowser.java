@@ -85,9 +85,6 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
         mContext = this;
 
@@ -260,6 +257,7 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
 
         Toolbar toolbar = findViewById(R.id.filebrowser_tool_bar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mBottomView = findViewById(R.id.bottom_navigation);
         mTopStorageView = findViewById(R.id.currPath_Nav);

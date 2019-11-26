@@ -83,7 +83,7 @@ public class Operations {
         this.mCurrentFilterOption = mCurrentFilterOption;
     }
 
-    private Constants.SORT_OPTIONS mCurrentSortOption = Constants.SORT_OPTIONS.NAME;
+    private Constants.SORT_OPTIONS mCurrentSortOption = Constants.SORT_OPTIONS.LAST_MODIFIED_DESC;
 
     private Constants.FILTER_OPTIONS mCurrentFilterOption = Constants.FILTER_OPTIONS.ALL;
 }

@@ -43,7 +43,7 @@ public class NavigationHelper {
     public boolean navigateBack() {
 
         File parent = mFileNavigator.getmCurrentNode().getParentFile();
-        if(parent==null || parent.compareTo(mFileNavigator.getmCurrentNode())==0 || Constants.externalStorageRoot==null || Constants.externalStorageRoot.compareTo(mFileNavigator.getmCurrentNode())==0 || Constants.internalStorageRoot.compareTo(mFileNavigator.getmCurrentNode())==0)
+        if (parent == null || parent.compareTo(mFileNavigator.getmCurrentNode()) == 0 || Constants.externalStorageRoot == null || Constants.externalStorageRoot.compareTo(mFileNavigator.getmCurrentNode()) == 0 || Constants.internalStorageRoot.compareTo(mFileNavigator.getmCurrentNode()) == 0)
             return false;
         mFileNavigator.setmCurrentNode(parent);
         triggerFileChanged();
@@ -60,13 +60,13 @@ public class NavigationHelper {
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             mFileNavigator.setmCurrentNode(Constants.externalStorageRoot);
         } else {
-            UIUtils.ShowToast(mContext.getString(R.string.external_storage_error),mContext);
+            UIUtils.ShowToast(mContext.getString(R.string.external_storage_error), mContext);
         }
         triggerFileChanged();
     }
 
     public void changeDirectory(File newDirectory) {
-        if(newDirectory!=null && newDirectory.exists() &&  newDirectory.isDirectory()) {
+        if (newDirectory != null && newDirectory.exists() && newDirectory.isDirectory()) {
             mFileNavigator.setmCurrentNode(newDirectory);
         }
         triggerFileChanged();
@@ -76,23 +76,27 @@ public class NavigationHelper {
         Operations op = Operations.getInstance(mContext);
         Constants.SORT_OPTIONS option = op.getmCurrentSortOption();
         Constants.FILTER_OPTIONS filterOption = op.getmCurrentFilterOption();
-        if (mFileNavigator.getmCurrentNode() == null) mFileNavigator.setmCurrentNode(mFileNavigator.getmRootNode());
+        if (mFileNavigator.getmCurrentNode() == null)
+            mFileNavigator.setmCurrentNode(mFileNavigator.getmRootNode());
         File[] files = mFileNavigator.getFilesInCurrentDirectory();
         if (files != null) {
             mFiles.clear();
             Comparator<File> comparator = NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
-            switch(option) {
+            switch (option) {
                 case SIZE:
                     comparator = SizeFileComparator.SIZE_COMPARATOR;
                     break;
-                case LAST_MODIFIED:
+                case LAST_MODIFIED_ASC:
                     comparator = LastModifiedFileComparator.LASTMODIFIED_COMPARATOR;
                     break;
+                case LAST_MODIFIED_DESC:
+                    comparator = LastModifiedFileComparator.LASTMODIFIED_REVERSE;
+                    break;
             }
-            Arrays.sort(files,comparator);
+            Arrays.sort(files, comparator);
             for (int i = 0; i < files.length; i++) {
                 boolean addToFilter = true;
-                switch(filterOption) {
+                switch (filterOption) {
                     case FILES:
                         addToFilter = !files[i].isDirectory();
                         break;
@@ -112,7 +116,7 @@ public class NavigationHelper {
     }
 
     public void triggerFileChanged() {
-        for(int i=0;i< mChangeDirectoryListeners.size();i++) {
+        for (int i = 0; i < mChangeDirectoryListeners.size(); i++) {
             mChangeDirectoryListeners.get(i).onFileChanged(getCurrentDirectory());
         }
     }

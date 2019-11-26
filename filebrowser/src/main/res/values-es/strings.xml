@@ -84,6 +84,7 @@
     <string-array name="sort_options">
         <item>Nombre</item>
         <item>Tamaño</item>
-        <item>Última modificación</item>
+        <item>Última modificación Asc</item>
+        <item>Last Modified Desc</item>
     </string-array>
 </resources>

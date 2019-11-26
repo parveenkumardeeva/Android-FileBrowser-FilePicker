@@ -22,7 +22,8 @@ public class Constants {
     public enum SORT_OPTIONS {
         NAME,
         SIZE,
-        LAST_MODIFIED
+        LAST_MODIFIED_ASC,
+        LAST_MODIFIED_DESC
     }
 
     public enum APP_MODE {

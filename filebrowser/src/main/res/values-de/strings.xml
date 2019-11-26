@@ -68,7 +68,9 @@
     <string-array name="sort_options">
         <item>Name</item>
         <item>Größe</item>
-        <item>Zuletzt geändert</item>
+        <item>Zuletzt geändert Asc</item>
+        <item>Last Modified Desc</item>
+
     </string-array>
     <string name="filter_only">Filtern nach</string>
     <string name="sort_by">Sortieren nach</string>
