@@ -119,7 +119,7 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
             return;
         }
         super.onBackPressed();
-/*
+        /*
         if (!mNavigationHelper.navigateBack()) {
             super.onBackPressed();
         }*/
