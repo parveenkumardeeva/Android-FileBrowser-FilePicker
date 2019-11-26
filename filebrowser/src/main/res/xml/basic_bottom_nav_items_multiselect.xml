@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tabs>
-
+    <tab id="@+id/menu_none" />
     <tab
         icon="@drawable/ic_remove_circle_outline_black_24dp"
         id="@+id/menu_delete"
