@@ -241,7 +241,7 @@ public class BasicFileBrowser extends AppCompatActivity implements OnFileChanged
         mBottomView.setOnTabSelectListener(mTabChangeListener);
         mBottomView.setOnTabReselectListener(mTabChangeListener);
 
-//        mBottomView.getTabWithId(R.id.menu_none).setVisibility(View.GONE);
+        mBottomView.getTabWithId(R.id.menu_none).setVisibility(View.GONE);
 
         onFileChanged(mNavigationHelper.getCurrentDirectory());
 
@@ -273,10 +273,10 @@ public class BasicFileBrowser extends AppCompatActivity implements OnFileChanged
     public void changeBottomNavMenu(Constants.CHOICE_MODE multiChoice) {
         if (multiChoice == Constants.CHOICE_MODE.SINGLE_CHOICE) {
             mBottomView.setItems(R.xml.basic_file_browser_bottom_nav_items);
-            //mBottomView.getTabWithId(R.id.menu_none).setVisibility(View.GONE);
+            mBottomView.getTabWithId(R.id.menu_none).setVisibility(View.GONE);
         } else {
             mBottomView.setItems(R.xml.basic_bottom_nav_items_multiselect);
-            //   mBottomView.getTabWithId(R.id.menu_none).setVisibility(View.GONE);
+            mBottomView.getTabWithId(R.id.menu_none).setVisibility(View.GONE);
         }
     }
 
