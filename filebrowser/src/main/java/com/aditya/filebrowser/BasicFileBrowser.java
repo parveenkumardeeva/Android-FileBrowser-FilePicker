@@ -174,7 +174,7 @@ public class BasicFileBrowser extends AppCompatActivity implements OnFileChanged
     }
 
     private void loadUi() {
-        setContentView(R.layout.filebrowser_activity_main);
+        setContentView(R.layout.basic_filebrowser_activity_main);
 
         mFilesListView = findViewById(R.id.recycler_view);
         mAdapter = new CustomAdapter(true, mFileList, mContext);
