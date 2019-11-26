@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        icon="@drawable/ic_swap_vert_black_24dp"
+        id="@+id/menu_sort"
+        title="@string/sort" />
+    <tab
+        icon="@drawable/ic_loop_black_24dp"
+        id="@+id/menu_refresh"
+        title="@string/refresh" />
+</tabs>

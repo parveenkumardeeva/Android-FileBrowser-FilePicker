@@ -1,8 +1,10 @@
 package com.aditya.filebrowser.adapters;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,14 +32,14 @@ import java.util.List;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> implements Filterable, FastScrollRecyclerView.SectionedAdapter {
 
     public void selectAll() {
-        for(int i=0;i<fileList.size();i++) {
+        for (int i = 0; i < fileList.size(); i++) {
             filteredfileList.get(i).setSelected(true);
         }
         notifyDataSetChanged();
     }
 
     public void unSelectAll() {
-        for(int i=0;i<fileList.size();i++) {
+        for (int i = 0; i < fileList.size(); i++) {
             filteredfileList.get(i).setSelected(false);
         }
         notifyDataSetChanged();
@@ -54,6 +56,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private Constants.CHOICE_MODE currMode;
     private Context mContext;
     private FileFilter mFileFilter;
+    private Boolean showFileSize;
+
     @Override
     public Filter getFilter() {
         if (mFileFilter == null) {
@@ -74,7 +78,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults filterResults = new FilterResults();
 
-            if (constraint!=null && constraint.length()>0) {
+            if (constraint != null && constraint.length() > 0) {
                 ArrayList<FileItem> tempList = new ArrayList<FileItem>();
                 // search content in friend list
                 for (FileItem fileItem : fileList) {
@@ -114,17 +118,22 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
 
-    public CustomAdapter(List<FileItem> fileList,Context mContext) {
+    public CustomAdapter(List<FileItem> fileList, Context mContext) {
         this.fileList = fileList;
         this.filteredfileList = fileList;
         this.currMode = Constants.CHOICE_MODE.SINGLE_CHOICE;
         this.mContext = mContext;
     }
 
+    public CustomAdapter(Boolean showFileSize, List<FileItem> fileList, Context mContext) {
+        this(fileList, mContext);
+        this.showFileSize = showFileSize;
+    }
+
     public void setChoiceMode(Constants.CHOICE_MODE mode) {
         this.currMode = mode;
-        if(mode== Constants.CHOICE_MODE.SINGLE_CHOICE)
-            for(FileItem item : filteredfileList) {
+        if (mode == Constants.CHOICE_MODE.SINGLE_CHOICE)
+            for (FileItem item : filteredfileList) {
                 item.setSelected(false);
             }
     }
@@ -147,10 +156,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.fileIcon.setImageResource(FileResolution.getFileIcon(f));
         int length = 0;
         String children = "";
-        if(f.isDirectory()) {
-            if(f.listFiles()!=null)
+        if (f.isDirectory()) {
+            if (f.listFiles() != null)
                 length = f.listFiles().length;
-            children = " (" +length + ")";
+            children = " (" + length + ")";
         }
 
         holder.fileName.setText(f.getName() + children);
@@ -158,14 +167,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             Date d = new Date(f.lastModified());
             SimpleDateFormat formatter = new SimpleDateFormat(Constants.DATE_FORMAT);
             String fileSize = "";
-            if(AssortedUtils.GetPrefs(Constants.SHOW_FOLDER_SIZE,mContext).equalsIgnoreCase("true")) {
+            if ((showFileSize != null && showFileSize) ||
+                    AssortedUtils.GetPrefs(Constants.SHOW_FOLDER_SIZE, mContext).equalsIgnoreCase("true")) {
                 fileSize = filteredfileList.get(holder.getAdapterPosition()).getFileSize();
             }
-            holder.fileModified.setText(mContext.getString(R.string.file_info,fileSize,formatter.format(d)));
+            holder.fileModified.setText(mContext.getString(R.string.file_info, fileSize, formatter.format(d)));
         } catch (Exception e) {
 
         }
-        if(getChoiceMode()== Constants.CHOICE_MODE.MULTI_CHOICE) {
+        if (getChoiceMode() == Constants.CHOICE_MODE.MULTI_CHOICE) {
             holder.selectcb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -185,9 +195,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     public List<FileItem> getSelectedItems() {
         List<FileItem> selectedItems = new ArrayList<FileItem>();
-        if(getChoiceMode()== Constants.CHOICE_MODE.MULTI_CHOICE) {
-            for(FileItem item : filteredfileList) {
-                if(item.isSelected())
+        if (getChoiceMode() == Constants.CHOICE_MODE.MULTI_CHOICE) {
+            for (FileItem item : filteredfileList) {
+                if (item.isSelected())
                     selectedItems.add(item);
             }
         }
