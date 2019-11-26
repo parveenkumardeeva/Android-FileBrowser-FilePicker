@@ -46,7 +46,7 @@
         <activity android:name=".utils.Permissions" android:theme="@style/Theme.AppCompat.Translucent" />
 
         <provider
-            android:name=".FileBrowserFileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="@string/filebrowser_provider"
             android:exported="false"
             android:grantUriPermissions="true">
