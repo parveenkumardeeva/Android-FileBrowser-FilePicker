@@ -219,7 +219,7 @@ public class FileBrowser extends AppCompatActivity implements OnFileChangedListe
                         MimeTypeMap mimeMap = MimeTypeMap.getSingleton();
                         Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
                         String mimeType = mimeMap.getMimeTypeFromExtension(FilenameUtils.getExtension(f.getName()));
-                        Uri uri = FileProvider.getUriForFile(mContext, mContext.getString(R.string.filebrowser_provider), f);
+                        Uri uri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", f);
                         openFileIntent.setDataAndType(uri, mimeType);
                         openFileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         openFileIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

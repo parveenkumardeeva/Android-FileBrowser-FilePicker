@@ -12,6 +12,7 @@ import android.os.Handler;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 
+import com.aditya.filebrowser.BuildConfig;
 import com.aditya.filebrowser.Constants;
 import com.aditya.filebrowser.NavigationHelper;
 import com.aditya.filebrowser.R;
@@ -245,7 +246,7 @@ public class FileIO {
         ArrayList<Uri> uris = new ArrayList<>();
         for (FileItem file : filesToBeShared) {
             uris.add(FileProvider.getUriForFile(mContext,
-                    mContext.getString(R.string.filebrowser_provider), file.getFile()));
+                    BuildConfig.APPLICATION_ID + ".provider", file.getFile()));
         }
         final Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         intent.setType("*/*");
