@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,6 +54,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 
 public class BasicFileBrowser extends AppCompatActivity implements OnFileChangedListener, IContextSwitcher {
@@ -194,7 +196,10 @@ public class BasicFileBrowser extends AppCompatActivity implements OnFileChanged
                         MimeTypeMap mimeMap = MimeTypeMap.getSingleton();
                         Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
                         String mimeType = mimeMap.getMimeTypeFromExtension(FilenameUtils.getExtension(f.getName()));
-                        Uri uri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", f);
+                        String providerName = BuildConfig.APPLICATION_ID + ".provider";
+                        System.out.println("Provider Name: " + providerName);
+                        Log.i("Provider:", providerName);
+                        Uri uri = FileProvider.getUriForFile(mContext, providerName, f);
                         openFileIntent.setDataAndType(uri, mimeType);
                         openFileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         openFileIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
