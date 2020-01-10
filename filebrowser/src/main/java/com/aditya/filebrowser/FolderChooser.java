@@ -13,12 +13,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.core.content.FileProvider;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -125,9 +127,9 @@ public class FolderChooser extends AppCompatActivity implements OnFileChangedLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == APP_PERMISSION_REQUEST ) {
+        if (requestCode == APP_PERMISSION_REQUEST) {
             if (resultCode != Activity.RESULT_OK)
-                Toast.makeText(mContext,mContext.getString(R.string.permission_error),Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, mContext.getString(R.string.permission_error), Toast.LENGTH_LONG).show();
             loadUi();
         }
     }
@@ -139,7 +141,7 @@ public class FolderChooser extends AppCompatActivity implements OnFileChangedLis
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         mSearchMenuItem = menu.findItem(R.id.action_search);
-        mSearchView = (SearchView)mSearchMenuItem.getActionView();
+        mSearchView = (SearchView) mSearchMenuItem.getActionView();
         // Assumes current activity is the searchable activity
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         //searchView.setSubmitButtonEnabled(true);
@@ -168,7 +170,7 @@ public class FolderChooser extends AppCompatActivity implements OnFileChangedLis
         mCurrentPath = (TextView) findViewById(R.id.currentPath);
 
         mFilesListView = (FastScrollRecyclerView) findViewById(R.id.recycler_view);
-        mAdapter = new CustomAdapter(mFileList,mContext);
+        mAdapter = new CustomAdapter(mFileList, mContext);
         mFilesListView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(mContext);
         mFilesListView.setLayoutManager(mLayoutManager);
@@ -185,8 +187,8 @@ public class FolderChooser extends AppCompatActivity implements OnFileChangedLis
                         MimeTypeMap mimeMap = MimeTypeMap.getSingleton();
                         Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
                         String mimeType = mimeMap.getMimeTypeFromExtension(FilenameUtils.getExtension(f.getName()));
-                        Uri uri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", f);
-                        openFileIntent.setDataAndType(uri,mimeType);
+                        Uri uri = FileProvider.getUriForFile(mContext, mContext.getPackageName() + ".file-browser-provider", f);
+                        openFileIntent.setDataAndType(uri, mimeType);
                         openFileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         openFileIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         try {
@@ -230,7 +232,7 @@ public class FolderChooser extends AppCompatActivity implements OnFileChangedLis
 
         mTopStorageView = findViewById(R.id.currPath_Nav);
 
-        mTabChangeListener = new TabChangeListener(this, mNavigationHelper, mAdapter, io,this);
+        mTabChangeListener = new TabChangeListener(this, mNavigationHelper, mAdapter, io, this);
         mTabChangeListener.setSelectionMode(Constants.SELECTION_MODES.values()[mSelectionMode]);
         mTabChangeListener.setAppMode(Constants.APP_MODE.FOLDER_CHOOSER);
 
@@ -247,7 +249,7 @@ public class FolderChooser extends AppCompatActivity implements OnFileChangedLis
 
         //switch to initial directory if given
         String initialDirectory = getIntent().getStringExtra(Constants.INITIAL_DIRECTORY);
-        if (initialDirectory != null && !initialDirectory.isEmpty() ) {
+        if (initialDirectory != null && !initialDirectory.isEmpty()) {
             File initDir = new File(initialDirectory);
             if (initDir.exists())
                 mNavigationHelper.changeDirectory(initDir);
@@ -262,7 +264,7 @@ public class FolderChooser extends AppCompatActivity implements OnFileChangedLis
         } else {
             if (mActionMode == null) {
                 closeSearchView();
-                ToolbarActionMode newToolBar = new ToolbarActionMode(this,this, mAdapter, Constants.APP_MODE.FOLDER_CHOOSER, io);
+                ToolbarActionMode newToolBar = new ToolbarActionMode(this, this, mAdapter, Constants.APP_MODE.FOLDER_CHOOSER, io);
                 mActionMode = startSupportActionMode(newToolBar);
                 mActionMode.setTitle(mContext.getString(R.string.select_multiple));
             }

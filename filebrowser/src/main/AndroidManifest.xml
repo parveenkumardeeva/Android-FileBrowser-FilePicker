@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aditya.filebrowser">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -14,8 +13,7 @@
             android:theme="@style/FileBrowserTheme">
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable"
-            />
+                android:resource="@xml/searchable" />
         </activity>
 
         <activity
@@ -23,8 +21,7 @@
             android:theme="@style/FileBrowserTheme">
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable"
-            />
+                android:resource="@xml/searchable" />
         </activity>
 
         <activity
@@ -32,8 +29,7 @@
             android:theme="@style/FileBrowserTheme">
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable"
-                />
+                android:resource="@xml/searchable" />
         </activity>
 
         <activity
@@ -52,16 +48,18 @@
                 android:resource="@xml/searchable" />
         </activity>
 
-        <activity android:name=".utils.Permissions" android:theme="@style/Theme.AppCompat.Translucent" />
+        <activity
+            android:name=".utils.Permissions"
+            android:theme="@style/Theme.AppCompat.Translucent" />
 
         <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:name=".BrowserFileProvider"
+            android:authorities="${applicationId}.file-browser-provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
     </application>

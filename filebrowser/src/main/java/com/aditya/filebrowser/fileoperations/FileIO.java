@@ -246,7 +246,7 @@ public class FileIO {
         ArrayList<Uri> uris = new ArrayList<>();
         for (FileItem file : filesToBeShared) {
             uris.add(FileProvider.getUriForFile(mContext,
-                    BuildConfig.APPLICATION_ID + ".provider", file.getFile()));
+                    mContext.getPackageName() + ".file-browser-provider", file.getFile()));
         }
         final Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         intent.setType("*/*");

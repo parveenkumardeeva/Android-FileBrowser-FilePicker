@@ -196,9 +196,8 @@ public class BasicFileBrowser extends AppCompatActivity implements OnFileChanged
                         MimeTypeMap mimeMap = MimeTypeMap.getSingleton();
                         Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
                         String mimeType = mimeMap.getMimeTypeFromExtension(FilenameUtils.getExtension(f.getName()));
-                        String providerName = BuildConfig.APPLICATION_ID + ".provider";
-                        System.out.println("Provider Name: " + providerName);
-                        Log.i("Provider:", providerName);
+                        String providerName = mContext.getPackageName() + ".file-browser-provider";
+                        Log.i("File Browser Provider :", providerName);
                         Uri uri = FileProvider.getUriForFile(mContext, providerName, f);
                         openFileIntent.setDataAndType(uri, mimeType);
                         openFileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
